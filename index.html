@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DigitizeIt POS</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff8e1;--sf:#fff;--tx:#1a1a1a;--mu:#6b6b6b;--ac:#f7c52d;--gr:#1a8f3c;--bd:#e6dcc0;--dg:#c62828;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17150e;--sf:#232010;--tx:#f4efe0;--mu:#a9a28a;--bd:#3a3520;--dg:#ef7b7b;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#17150e;--sf:#232010;--tx:#f4efe0;--mu:#a9a28a;--bd:#3a3520;--dg:#ef7b7b;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.4 Poppins,system-ui,Arial,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--ac);color:#1a1a1a;display:flex;align-items:center;gap:10px;padding:10px 14px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--ac);z-index:10}
+header b{font-weight:800;font-size:18px}header b i{font-style:normal;color:var(--gr)}
+nav{display:flex;gap:6px;margin-left:auto}
+nav button{border:0;background:#0001;color:inherit;padding:6px 12px;border-radius:99px;font:600 13px Poppins,sans-serif;cursor:pointer}
+nav button.on{background:#1a1a1a;color:#fff}
+main{max-width:1000px;margin:0 auto;padding:12px;display:grid;gap:12px}
+.two{display:grid;gap:12px;grid-template-columns:1fr}
+@media(min-width:820px){.two{grid-template-columns:1.1fr .9fr;align-items:start}}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:14px;padding:14px}
+h3{margin:0 0 10px;font-size:14px;font-weight:600;color:var(--mu);text-transform:uppercase;letter-spacing:.04em}
+input,select{width:100%;padding:10px;border:1px solid var(--bd);border-radius:10px;background:var(--bg);color:var(--tx);font:inherit}
+label{display:block;font-size:12px;color:var(--mu);margin:8px 0 3px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}.row>.s{flex:0 0 auto}
+.btn{border:0;border-radius:10px;padding:10px 14px;background:var(--ac);color:#1a1a1a;font:600 14px Poppins,sans-serif;cursor:pointer}
+.btn.g{background:var(--gr);color:#fff}.btn.o{background:transparent;border:1px solid var(--bd);color:var(--tx)}.btn.d{background:transparent;color:var(--dg);padding:6px 8px}
+.btn.w{width:100%;margin-top:10px}
+.sv{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px}
+.sv button{text-align:left;border:1px solid var(--bd);background:var(--bg);color:var(--tx);border-radius:12px;padding:10px;cursor:pointer;font:inherit}
+.sv button:active{border-color:var(--gr)}.sv small{display:block;color:var(--gr);font-weight:600}
+.ln{display:grid;grid-template-columns:1fr auto;gap:6px;padding:8px 0;border-bottom:1px dashed var(--bd)}
+.ln .q{display:flex;gap:4px;align-items:center}.ln .q button{width:30px;height:30px;border-radius:8px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);cursor:pointer}
+.ln .q input{width:64px;padding:5px}
+.tot{display:flex;justify-content:space-between;font-weight:800;font-size:20px;margin-top:10px}
+.sl{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--bd)}.sl span{flex:1}.sl input{width:90px}
+.hide{display:none!important}
+.pv{overflow-x:auto;background:#8884;padding:10px;border-radius:10px;text-align:center}
+#rcpt{display:inline-block;text-align:left;background:#fff;color:#000;font:400 11px/1.35 Poppins,Arial,sans-serif;padding:3mm 2mm}
+#rcpt.w85{width:85mm}#rcpt.w50{width:50mm;font-size:9px}
+#rcpt .c{text-align:center}#rcpt .lg{text-align:center;margin-bottom:2px}
+#rcpt .lg img{width:50%;height:auto;display:block;margin:0 auto}
+#rcpt .lgo{display:inline-block;font:800 22px Poppins,Arial,sans-serif;letter-spacing:-.5px}
+#rcpt.w50 .lgo{font-size:17px}
+#rcpt .lgo b{background:#000;color:#fff;padding:0 3px;margin-left:1px;border-radius:2px}
+#rcpt .nm{text-align:center;font-weight:600;font-size:1.15em}
+#rcpt hr{border:0;border-top:1px dashed #000;margin:4px 0}
+#rcpt table{width:100%;border-collapse:collapse}#rcpt th{font-weight:600;text-align:left;border-bottom:1px solid #000}
+#rcpt td{vertical-align:top;padding:1px 0}#rcpt .r,#rcpt th.r{text-align:right}
+#rcpt.w50 .pr{display:none}
+#rcpt .t{display:flex;justify-content:space-between;font-weight:600;font-size:1.25em}
+#rcpt .qr{width:30mm;height:30mm;margin:3px auto 0;display:block}#rcpt .qr svg{width:100%;height:100%;display:block}#rcpt .qc{text-align:center;font-size:.85em;word-break:break-all}#rcpt .lk{text-align:center;font-size:.8em;line-height:1.3;word-break:break-all}#rcpt.w50 .qr{width:26mm;height:26mm}.lks{display:flex;flex-wrap:wrap;gap:8px}.lks a{flex:1 1 200px;text-decoration:none;color:var(--tx);border:1px solid var(--bd);background:var(--bg);border-radius:12px;padding:10px}.lks small{display:block;color:var(--mu);font-size:12px}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1a1a1a;color:#fff;padding:9px 16px;border-radius:99px;font-size:13px;z-index:20}
+.note{font-size:12px;color:var(--mu)}
+@media print{body::before,header,main>*:not(#bill){display:none!important}#bill>*:not(.two),.two>*:not(:last-child){display:none!important}
+body,main,.two,.card,.pv{all:unset;display:block}#rcpt{position:absolute;left:0;top:0;padding:2mm}}
+</style><style id="pg"></style><script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script></head>
+<body>
+<header><b>Digitize<i>It</i></b><nav id="nav"><button data-t="bill" class="on">Bill</button><button data-t="svc">Services</button><button data-t="set">Settings</button></nav></header>
+<main>
+<section id="bill"><div class="two">
+ <div style="display:grid;gap:12px">
+  <div class="card"><h3>Customer</h3>
+   <div class="row"><div><label>Name</label><input id="cn" placeholder="Customer name"></div><div><label>Mobile</label><input id="cm" inputmode="tel" placeholder="Mobile no."></div></div>
+   <label>POS user</label><select id="pu"></select><label>Payment mode</label><select id="pm"><option>Cash</option><option>UPI - Google Pay</option><option>UPI - PhonePe</option><option>UPI - BHIM</option><option>UPI - Other</option></select></div>
+  <div class="card"><h3>Services</h3><div class="sv" id="sv"></div>
+   <h3 style="margin-top:14px">Custom service</h3>
+   <div class="row"><input id="xn" placeholder="Service name"><input id="xp" inputmode="decimal" placeholder="Price" style="max-width:100px"><button class="btn s" id="xa">Add</button></div>
+   <label class="row" style="justify-content:flex-start;gap:6px"><input type="checkbox" id="xs" style="width:auto"> Save to service list</label></div>
+ </div>
+ <div style="display:grid;gap:12px">
+  <div class="card"><h3>Items</h3><div id="cart"></div><div class="tot"><span>Total</span><span id="tt">₹0</span></div>
+   <div class="row" style="margin-top:10px"><button class="btn o" id="nb">New bill</button><button class="btn g" id="pr">Print bill</button></div><button class="btn o w" id="pf">Save PDF</button></div>
+  <div class="card"><h3>Preview <span class="note" id="wl"></span></h3><div class="pv"><div id="rcpt"></div></div></div>
+ </div></div></section>
+<section id="svc" class="hide"><div class="card"><h3>Service list</h3><div id="sl"></div>
+ <div class="row" style="margin-top:12px"><input id="an" placeholder="New service"><input id="ap" inputmode="decimal" placeholder="Price" style="max-width:100px"><button class="btn s" id="aa">Add</button></div>
+ <p class="note" id="sn"></p></div></section>
+<section id="set" class="hide"><div class="card"><h3>Shop settings</h3>
+ <label>Name</label><input id="sn1"><label>Address</label><input id="sa"><label>Mobile</label><input id="sp">
+ <label>Receipt width</label><select id="sw"><option value="85">85 mm</option><option value="50">50 mm</option></select>
+ <label>UPI ID</label><input id="su2"><label>Footer text</label><input id="sf"><label>POS users (comma separated)</label><input id="su">
+ <label>Custom logo (optional, black and white works best)</label><div class="row"><input type="file" id="lf" accept="image/*"><button class="btn o s" id="lx">Use default</button></div>
+ <button class="btn g w" id="ss">Save settings</button></div></section>
+<section id="lk"><div class="card"><h3>Our websites</h3><div class="lks" id="lks"></div></div></section>
+</main>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const DEF=[["Aadhaar Card Services",100],["Voter Card Services",50],["Pan Card Services",58],["Ration Card Services",50],["Ayushman Bharat Card",70]];
+let cfg={name:"DigitizeIt",address:"Your address here",phone:"",users:["Admin"],width:"85",footer:"Thank you for choosing DigitizeIt !",upi:"rimpachattopadhyay709@okicici",logo:"",billNo:0},services=[],cart=[],db=null,tab="bill";
+const LS={g(k,d){try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},s(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const toast=m=>{const t=document.createElement('div');t.id='toast';t.textContent=m;document.body.append(t);setTimeout(()=>t.remove(),1800)};
+const fail=e=>toast("Could not save: "+(e&&e.message||"error"));
+// ---- storage (server db if available, else this browser) ----
+function saveCfg(){db?db.doc("config/shop").set(cfg).catch(fail):LS.s("cfg",cfg)}
+function addSvc(n,p){const o={name:n,price:p,order:Date.now()};if(db)db.collection("services").doc("s"+o.order).set(o).catch(fail);else{services.push({id:"s"+o.order,...o});LS.s("svc",services);rSvc();rBill()}}
+function updSvc(id,p){if(db)db.doc("services/"+id).update({price:p}).catch(fail);else{services.find(s=>s.id==id).price=p;LS.s("svc",services);rBill()}}
+function delSvc(id){if(db)db.doc("services/"+id).delete().catch(fail);else{services=services.filter(s=>s.id!=id);LS.s("svc",services);rSvc();rBill()}}
+// ---- views ----
+function rBill(){
+ $('#sv').innerHTML=services.map(s=>`<button data-id="${esc(s.id)}">${esc(s.name)}<small>₹${+s.price}</small></button>`).join('')||'<span class="note">Loading services…</span>';
+ $('#pu').innerHTML=cfg.users.map(u=>`<option>${esc(u)}</option>`).join('');
+ const keep=$('#pu').dataset.v;if(keep&&cfg.users.includes(keep))$('#pu').value=keep;
+ $('#cart').innerHTML=cart.map((c,i)=>`<div class="ln"><div><b>${i+1}.</b> ${esc(c.n)}</div><button class="btn d" data-x="${i}">✕</button>
+ <div class="q"><button data-m="${i}">−</button><b>${c.q}</b><button data-a="${i}">+</button> × ₹<input data-p="${i}" value="${c.p}" inputmode="decimal"></div><b>₹${c.q*c.p}</b></div>`).join('')||'<p class="note">Tap a service to add it.</p>';
+ $('#tt').textContent='₹'+cart.reduce((a,c)=>a+c.q*c.p,0);rRc()}
+const LOGO="/_blob/82e907bd3cd2db484af3406c8a5e51dc";
+function logo(){const u=cfg.logo&&String(cfg.logo).startsWith('data:image/')?cfg.logo:LOGO;return `<img src="${esc(u)}" alt="DigitizeIt" crossorigin="anonymous">`}
+if(window.qrcode&&qrcode.stringToBytesFuncs&&qrcode.stringToBytesFuncs['UTF-8'])qrcode.stringToBytes=qrcode.stringToBytesFuncs['UTF-8'];
+const enc=encodeURIComponent,LINKS=[["DigitizeIt","Main website","https://digitizeit.lovable.app/"],["ResizeIt","Make it fit","https://rijuc8121-stack.github.io/ResizeIt/"],["ScanIt","Scan & Verify documents","https://antique-scan-it-now.base44.app"],["UnlockIt","PDF Tools","https://rijuc8282-cloud.github.io/UnlockIt/#sig"]];
+function qr(t){try{const q=qrcode(0,'M');q.addData(t);q.make();return q.createSvgTag({cellSize:2,margin:0,scalable:true})}catch(e){return ''}}
+function det(no,tot){return `DigitizeIt Bill #${no}\n${new Date().toLocaleString('en-IN')}\nCustomer: ${$('#cn').value||'-'}\nMobile: ${$('#cm').value||'-'}\nPOS user: ${$('#pu').value}\n`+cart.map((c,i)=>`${i+1}. ${c.n} x${c.q} @${c.p} = ${c.q*c.p}`).join('\n')+`\nTotal: Rs ${tot}\nPaid by: ${$('#pm').value}`}
+function rcBlocks(tot,no){no=no||cfg.billNo+1;let h=`<div>Payment: ${esc($('#pm').value)}</div>`;
+ if(cart.length&&$('#pm').value.startsWith('UPI')&&cfg.upi&&tot>0)h+=`<hr><div class="qc">Scan to pay ₹${tot}<br>${esc(cfg.upi)}</div><div class="qr">${qr(`upi://pay?pa=${enc(cfg.upi)}&pn=${enc(cfg.name)}&am=${tot.toFixed(2)}&cu=INR&tn=${enc('Bill '+no)}`)}</div>`;
+ if(cart.length)h+=`<hr><div class="qc">Scan for bill details</div><div class="qr">${qr(det(no,tot))}</div>`;
+ return h}
+function rRc(no){
+ const w=cfg.width,R=$('#rcpt'),tot=cart.reduce((a,c)=>a+c.q*c.p,0),d=new Date();
+ R.className='w'+w;$('#pg').textContent=`@page{size:${w}mm auto;margin:0}`;$('#wl').textContent=w+' mm';
+ R.innerHTML=`<div class="lg">${logo()}</div><div class="nm">${esc(cfg.name)}</div>
+ <div class="c">${esc(cfg.address)}</div><div class="c">${cfg.phone?'Mob: '+esc(cfg.phone):''}</div><hr>
+ <div>Bill No: ${no||cfg.billNo+1}</div><div>${d.toLocaleDateString('en-IN')} ${d.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}</div>
+ <div>POS user: ${esc($('#pu').value)}</div>${$('#cn').value?`<div>Customer: ${esc($('#cn').value)}</div>`:''}${$('#cm').value?`<div>Mobile: ${esc($('#cm').value)}</div>`:''}<hr>
+ <table><tr><th>Sl</th><th>Service</th><th>Qty</th><th class="pr r">Price</th><th class="r">Amt</th></tr>
+ ${cart.map((c,i)=>`<tr><td>${i+1}</td><td>${esc(c.n)}</td><td>${c.q}</td><td class="pr r">${c.p}</td><td class="r">${c.q*c.p}</td></tr>`).join('')}</table><hr>
+ <div class="t"><span>TOTAL</span><span>₹${tot}</span></div><hr>${rcBlocks(tot,no)}<hr><div class="c"><b>${esc(cfg.footer)}</b></div>`}
+function rSvc(){
+ $('#sl').innerHTML=services.map(s=>`<div class="sl"><span>${esc(s.name)}</span>₹<input value="${+s.price}" data-e="${esc(s.id)}" inputmode="decimal"><button class="btn d" data-d="${esc(s.id)}">Delete</button></div>`).join('');
+ $('#sn').textContent=db?'Saved on the server for everyone who opens this page.':'Server storage unavailable here: changes are kept in this browser only.'}
+function rSet(){$('#sn1').value=cfg.name;$('#sa').value=cfg.address;$('#sp').value=cfg.phone;$('#sw').value=cfg.width;$('#sf').value=cfg.footer;$('#su2').value=cfg.upi;$('#su').value=cfg.users.join(', ')}
+function show(t){tab=t;['bill','svc','set'].forEach(x=>$('#'+x).classList.toggle('hide',x!=t));document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t==t));if(t=='set')rSet();if(t=='svc')rSvc()}
+function add(n,p){const f=cart.find(c=>c.n==n&&c.p==p);f?f.q++:cart.push({n,p:+p,q:1});rBill()}
+// ---- events ----
+$('#nav').onclick=e=>e.target.dataset.t&&show(e.target.dataset.t);
+$('#sv').onclick=e=>{const b=e.target.closest('button');if(!b)return;const s=services.find(x=>x.id==b.dataset.id);s&&add(s.name,s.price)};
+$('#cart').onclick=e=>{const b=e.target.closest('button');if(!b)return;const D=b.dataset;
+ if(D.x!=null)cart.splice(D.x,1);else if(D.a!=null)cart[D.a].q++;else if(D.m!=null){if(--cart[D.m].q<1)cart.splice(D.m,1)}rBill()};
+$('#cart').oninput=e=>{const i=e.target.dataset.p;if(i!=null){cart[i].p=+e.target.value||0;$('#tt').textContent='₹'+cart.reduce((a,c)=>a+c.q*c.p,0);rRc()}};
+$('#cart').onchange=()=>rBill();
+['cn','cm'].forEach(i=>$('#'+i).oninput=()=>rRc());$('#pu').onchange=e=>{e.target.dataset.v=e.target.value;rRc()};$('#pm').onchange=()=>rRc();
+$('#xa').onclick=()=>{const n=$('#xn').value.trim(),p=+$('#xp').value;if(!n||!(p>=0)||$('#xp').value==='')return toast('Enter name and price');add(n,p);if($('#xs').checked)addSvc(n,p);$('#xn').value=$('#xp').value=''};
+$('#aa').onclick=()=>{const n=$('#an').value.trim(),p=+$('#ap').value;if(!n||$('#ap').value==='')return toast('Enter name and price');addSvc(n,p);$('#an').value=$('#ap').value=''};
+$('#sl').onchange=e=>e.target.dataset.e&&updSvc(e.target.dataset.e,+e.target.value||0);
+$('#sl').onclick=e=>{const id=e.target.dataset.d;id&&confirm('Delete this service?')&&delSvc(id)};
+$('#pf').onclick=async()=>{if(!cart.length)return toast('Add at least one service');
+ try{const no=cfg.billNo+1;cfg.billNo=no;saveCfg();
+  if(db)db.collection("bills").doc("b"+no).set({no,at:new Date().toISOString(),user:$('#pu').value,pay:$('#pm').value,customer:$('#cn').value,mobile:$('#cm').value,items:cart,total:cart.reduce((a,c)=>a+c.q*c.p,0)}).catch(fail);
+  rRc(no);toast('Making PDF…');const cv=await html2canvas($('#rcpt'),{scale:3,backgroundColor:'#fff',useCORS:true});
+  const w=+cfg.width,h=w*cv.height/cv.width,pdf=new window.jspdf.jsPDF({unit:'mm',format:[w,h]});
+  pdf.addImage(cv.toDataURL('image/jpeg',.95),'JPEG',0,0,w,h);
+  const dl=await claude.use('downloads'),fn='DigitizeIt-Bill-'+no+'.pdf';
+  if(dl)await dl.save({filename:fn,data:pdf.output('blob')});else pdf.save(fn)
+ }catch(e){toast('PDF failed: '+(e&&e.message||'error'))}};
+$('#nb').onclick=()=>{cart=[];$('#cn').value=$('#cm').value='';rBill()};
+$('#pr').onclick=()=>{if(!cart.length)return toast('Add at least one service');
+ const no=cfg.billNo+1;cfg.billNo=no;saveCfg();
+ const bill={no,at:new Date().toISOString(),user:$('#pu').value,pay:$('#pm').value,customer:$('#cn').value,mobile:$('#cm').value,items:cart,total:cart.reduce((a,c)=>a+c.q*c.p,0)};
+ if(db)db.collection("bills").doc("b"+no).set(bill).catch(fail);rRc(no);setTimeout(()=>window.print(),50)};
+$('#ss').onclick=()=>{cfg={...cfg,name:$('#sn1').value.trim()||'DigitizeIt',address:$('#sa').value.trim(),phone:$('#sp').value.trim(),width:$('#sw').value,footer:$('#sf').value.trim(),upi:$('#su2').value.trim(),
+ users:$('#su').value.split(',').map(x=>x.trim()).filter(Boolean)};if(!cfg.users.length)cfg.users=['Admin'];saveCfg();rBill();toast('Settings saved')};
+$('#lx').onclick=()=>{cfg.logo='';saveCfg();rBill();toast('Default logo')};
+$('#lf').onchange=e=>{const f=e.target.files[0];if(!f)return;const im=new Image();im.onload=()=>{const W=384,c=document.createElement('canvas');c.width=W;c.height=Math.round(im.height*W/im.width);const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,W,c.height);x.drawImage(im,0,0,W,c.height);cfg.logo=c.toDataURL('image/jpeg',.7);saveCfg();rBill();toast('Logo updated')};im.onerror=()=>toast('Could not read this image');const fr=new FileReader();fr.onload=()=>{im.src=fr.result};fr.onerror=()=>toast('Could not read file');fr.readAsDataURL(f)};
+// ---- start ----
+$('#lks').innerHTML=LINKS.map(l=>`<a href="${esc(l[2])}" target="_blank" rel="noopener noreferrer"><b>${esc(l[0])}</b><small>${esc(l[1])}</small></a>`).join('');
+cfg={...cfg,...LS.g("cfg",{})};services=LS.g("svc",DEF.map((d,i)=>({id:"d"+i,name:d[0],price:d[1],order:i})));rBill();
+(async()=>{try{db=window.claude&&await claude.use("db")}catch(e){db=null}
+ if(!db){rSvc();return}
+ services=[];rBill();
+ db.doc("config/shop").onSnapshot(s=>{if(s.exists)cfg={...cfg,...s.data()};rBill();if(tab=='set')rSet()},()=>{});
+ db.collection("services").onSnapshot(q=>{services=q.docs.map(d=>({id:d.id,...d.data()})).sort((a,b)=>(a.order||0)-(b.order||0));rBill();if(tab=='svc')rSvc()},()=>{});
+})();
+</script></body></html>
